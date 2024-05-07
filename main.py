@@ -1,4 +1,4 @@
-import cv2
+import cv2 as cv
 import tkinter as tk
 from tkinter.filedialog import askopenfilename
 from tkinter.messagebox import showerror
@@ -9,8 +9,8 @@ img_file = []
 
 
 def read_img(path_image):
-    file_image = cv2.imread(path_image)
-    file_image = cv2.cvtColor(file_image, cv2.COLOR_BGR2RGB)
+    file_image = cv.imread(path_image)
+    file_image = cv.cvtColor(file_image, cv.COLOR_BGR2RGB)
     return file_image
 
 
@@ -44,8 +44,8 @@ def sobel_filter():
     r = np.matrix("1 2 1; 0 0 0; -1 -2 -1")
     a = read_img(img_file[0])
     b = np.zeros(a.shape[:3])
-    a = cv2.cvtColor(a, cv2.COLOR_BGR2RGB)
-    b[:, :, 0] = cv2.filter2D(a[:, :, 0], -1, r)
+    a = cv.cvtColor(a, cv.COLOR_BGR2RGB)
+    b[:, :, 0] = cv.filter2D(a[:, :, 0], -1, r)
     window = tk.Toplevel()
 
     pil_image = Image.fromarray(b[:, :, 0].astype(np.uint8))
