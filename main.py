@@ -31,11 +31,15 @@ def open_file_manager():
             messagebox.showerror("Error", "No hay un archivo cargado")
 
 
-def filtro():
-    ventAbrir = tk.Toplevel()
-    ventAbrir.geometry("1000x400")
-    ventAbrir.title("otra ventana")
-    path_file = img_file[0]
+def load_image():
+    window = tk.Toplevel()
+    window.geometry("1000x400")
+    window.title("Imagen cargada")
+    path_file = ""
+    try:
+        path_file = img_file[0]
+    except IndexError:
+        messagebox.showerror("Error", "No hay un archivo pre cargado")
     img = Image.open(path_file)
     tk_image = ImageTk.PhotoImage(img)
     label = tk.Label(ventAbrir, image=tk_image)
