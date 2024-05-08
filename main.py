@@ -1,7 +1,7 @@
 import cv2 as cv
 import tkinter as tk
 from tkinter.filedialog import askopenfilename
-from tkinter.messagebox import showerror
+from tkinter import messagebox
 import numpy as np
 from PIL import ImageTk, Image
 
@@ -9,7 +9,10 @@ img_file = []
 
 
 def read_img(path_image):
-    file_image = cv.imread(path_image)
+    try:
+        file_image = cv.imread(path_image)
+    except IndexError:
+        messagebox.showerror("Error", "No hay un archivo cargado")
     file_image = cv.cvtColor(file_image, cv.COLOR_BGR2RGB)
     return file_image
 
@@ -24,8 +27,8 @@ def open_file_manager():
                 img_file[0] = archivo
             else:
                 img_file.append(archivo)
-        except:
-            showerror("error al carga la imagen")
+        except IndexError:
+            messagebox.showerror("Error", "No hay un archivo cargado")
 
 
 def filtro():
