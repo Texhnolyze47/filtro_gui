@@ -62,11 +62,13 @@ def sobel_filter():
 
 
 if __name__ == "__main__":
-    ventana = tk.Tk()
-    ventana.geometry("1300x650+20+0")
-    ventana.minsize(600, 370)
-    ventana.title("PDI: PROCESAMIENTO DIGITAL DE IMAGENES")
-    barraMenu = tk.Menu(ventana)
+    root = tk.Tk()
+    root.geometry("1300x650+20+0")
+    root.minsize(600, 370)
+    root.title("PDI: PROCESAMIENTO DIGITAL DE IMAGENES")
+
+    root.columnconfigure((0, 1), weight=1, uniform="a")
+    barraMenu = tk.Menu(root)
     menuArchivo = tk.Menu(barraMenu)
     menuArchivo.add_command(label="Subir imagen", command=open_file_manager)
     menuArchivo.add_command(label="Imagenes precargadas", command=filtro)
@@ -87,6 +89,6 @@ if __name__ == "__main__":
     ffMenu.add_command(label="Realce y Deteccion de Bordes")
 
     fondo = tk.PhotoImage(file="./assets/background_image.gif")
-    tk.Label(ventana, image=fondo).place(relx=0.5, rely=0.5, anchor=tk.CENTER, relwidth=1, relheight=1)
-    ventana.config(menu=barraMenu)
-    ventana.mainloop()
+    tk.Label(root, image=fondo).place(relx=0.5, rely=0.5, anchor=tk.CENTER, relwidth=1, relheight=1)
+    root.config(menu=barraMenu)
+    root.mainloop()
