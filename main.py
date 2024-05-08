@@ -76,6 +76,70 @@ def sobel_filter():
     window.mainloop()
 
 
+def laplacian_filter():
+    window = tk.Toplevel()
+    window.title("Filtro Laplaciano")
+
+    try:
+        img = read_img(img_file[0])
+    except IndexError:
+        messagebox.showerror("Error", "No hay un archivo cargado")
+        return
+
+    # Aplicar el filtro Laplaciano
+    laplacian = cv.Laplacian(img, cv.CV_64F)
+
+    original_pil_image = Image.fromarray(img.astype(np.uint8))
+    original_tk_image = ImageTk.PhotoImage(original_pil_image)
+
+    orignal_label_image = tk.Label(window, image=original_tk_image)
+    orignal_label_image.pack(side=tk.LEFT)
+
+    # Convertir la imagen procesada a formato PIL para mostrarla en Tkinter
+    laplacian_pil_image = Image.fromarray(laplacian.astype(np.uint8))
+    laplacian_tk_image = ImageTk.PhotoImage(laplacian_pil_image)
+
+    # Crear una etiqueta para mostrar la imagen
+    laplacian_label_image = tk.Label(window, image=laplacian_tk_image)
+    laplacian_label_image.pack(side=tk.RIGHT)
+
+
+
+    window.mainloop()
+
+
+def roberts_filter():
+    window = tk.Toplevel()
+    window.title("Filtro Roberts")
+
+    try:
+        img = read_img(img_file[0])
+    except IndexError:
+        messagebox.showerror("Error", "No hay un archivo cargado")
+        return
+
+    # Convertir la imagen a escala de grises
+    gray = cv.cvtColor(img, cv.COLOR_RGB2GRAY)
+
+    roberts_x = cv.Sobel(gray, cv.CV_64F, 1, 0, ksize=1)
+    roberts_y = cv.Sobel(gray, cv.CV_64F, 0, 1, ksize=1)
+    roberts = np.hypot(roberts_x, roberts_y)
+
+    original_pil_image = Image.fromarray(img)
+    original_tk_image = ImageTk.PhotoImage(original_pil_image)
+
+    orignal_label_image = tk.Label(window, image=original_tk_image)
+    orignal_label_image.pack(side=tk.LEFT)
+
+    roberts_pil_image = Image.fromarray(np.uint8(roberts))
+    roberts_tk_image = ImageTk.PhotoImage(roberts_pil_image)
+
+    roberts_label_image = tk.Label(window, image=roberts_tk_image)
+    roberts_label_image.pack(side=tk.RIGHT)
+
+    window.mainloop()
+
+
 if __name__ == "__main__":
     root = tk.Tk()
     root.geometry("1300x650+20+0")
