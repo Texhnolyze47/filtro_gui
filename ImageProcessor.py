@@ -124,3 +124,18 @@ class ImageProcessor:
         roberts = np.hypot(roberts_x, roberts_y)
 
         display_compare_window(img, np.uint8(roberts), "robers_filter")
+
+    def high_pass_filter(self):
+        try:
+            img = read_img(self.img_file[0])
+        except IndexError:
+            messagebox.showerror("Error","No hay un archivo cargado")
+            return
+            # Convertir la imagen a escala de grises
+        gray = cv.cvtColor(img, cv.COLOR_RGB2GRAY)
+
+        # Aplicar el filtro de paso alto
+        kernel = np.array([[-1, -1, -1], [-1, 8, -1], [-1, -1, -1]])
+        high_pass = cv.filter2D(gray, -1, kernel)
+
+        display_compare_window(img, high_pass, "High Pass Filter")
