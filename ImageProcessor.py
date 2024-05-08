@@ -188,4 +188,7 @@ class ImageProcessor:
 
         text = pytesseract.image_to_string(threshold_img)
 
+        if text == "":
+            text = "No se pudo reconocer ningun texto"
+
         messagebox.showinfo("Mesaje", text)
