@@ -86,7 +86,7 @@ if __name__ == "__main__":
     barraMenu = tk.Menu(root)
     menuArchivo = tk.Menu(barraMenu)
     menuArchivo.add_command(label="Subir imagen", command=open_file_manager)
-    menuArchivo.add_command(label="Imagenes precargadas", command=filtro)
+    menuArchivo.add_command(label="Imagenes precargadas", command=load_image)
     menuArchivo.add_separator()
     menuArchivo.add_command(label="Exit")
     barraMenu.add_cascade(label="Imagenes", menu=menuArchivo)
