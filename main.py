@@ -1,6 +1,7 @@
 import tkinter as tk
 from ImageProcessor import ImageProcessor
 
+
 if __name__ == "__main__":
     root = tk.Tk()
     root.geometry("1300x650+20+0")
@@ -30,7 +31,12 @@ if __name__ == "__main__":
     ffMenu.add_command(label="Paso Bajo", command=image_processor.low_pass_filter)
     ffMenu.add_command(label="Realce y Deteccion de Bordes", command=image_processor.edge_enhancement)
 
+    ocrMenu = tk.Menu(barraMenu)
+    barraMenu.add_cascade(label="OCR", menu=ocrMenu)
+    ocrMenu.add_command(label="OCR", command=image_processor.ocr)
+
     fondo = tk.PhotoImage(file="./assets/background_image.gif")
     tk.Label(root, image=fondo).place(relx=0.5, rely=0.5, anchor=tk.CENTER, relwidth=1, relheight=1)
+
     root.config(menu=barraMenu)
     root.mainloop()

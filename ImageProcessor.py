@@ -3,8 +3,10 @@ from tkinter import messagebox
 import tkinter as tk
 import cv2 as cv
 import numpy as np
+import pytesseract
 import skimage.feature
 from PIL import ImageTk, Image
+
 
 
 def read_img(path_image):
@@ -173,3 +175,23 @@ class ImageProcessor:
         edges = edges * 255
 
         display_compare_window(img,edges, "edge-enhancement")
+
+    def ocr(self):
+        try:
+            img = read_img(self.img_file[0])
+        except IndexError:
+            messagebox.showerror("Error", "No hay un archivo cargado")
+            return
+
+        gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+
+        threshold_img = cv.threshold(gray,0,255, cv.THRESH_BINARY + cv.THRESH_OTSU)[1]
+
+        text = pytesseract.image_to_string(threshold_img)
+
+        messagebox.showinfo("Mesaje",text)
+
+
+
+
+
