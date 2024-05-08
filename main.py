@@ -42,9 +42,10 @@ def load_image():
         messagebox.showerror("Error", "No hay un archivo pre cargado")
     img = Image.open(path_file)
     tk_image = ImageTk.PhotoImage(img)
-    label = tk.Label(ventAbrir, image=tk_image)
+    # TODO: fix - Expected type '_Image | str', got 'PhotoImage' instead
+    label = tk.Label(window, image=tk_image)
     label.pack()
-    ventAbrir.mainloop()
+    window.mainloop()
 
 
 def sobel_filter():
