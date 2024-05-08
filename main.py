@@ -160,6 +160,8 @@ if __name__ == "__main__":
     feMenu.add_command(label="Sobel", command=sobel_filter)
     feMenu.add_command(label="Laplaciano")
     feMenu.add_command(label="roberts")
+    feMenu.add_command(label="Laplaciano", command=laplacian_filter)
+    feMenu.add_command(label="roberts", command=roberts_filter)
 
     ffMenu = tk.Menu(barraMenu)
     barraMenu.add_cascade(label="Filtro Frecuencia", menu=ffMenu)
