@@ -139,3 +139,16 @@ class ImageProcessor:
         high_pass = cv.filter2D(gray, -1, kernel)
 
         display_compare_window(img, high_pass, "High Pass Filter")
+
+    def low_pass_filter(self):
+        try:
+            img = read_img(self.img_file[0])
+        except IndexError:
+            messagebox.showerror("Error", "No hay un archivo cargado")
+            return
+
+        # Aplicar el filtro de paso bajo
+        kernel = np.ones((5, 5), np.float32) / 25
+        low_pass = cv.filter2D(img, -1, kernel)
+
+        display_compare_window(img, low_pass, "Low Pass Filter")
