@@ -8,7 +8,6 @@ import skimage.feature
 from PIL import ImageTk, Image
 
 
-
 def read_img(path_image):
     file_image = cv.imread(path_image)
     if file_image is None:
@@ -33,6 +32,7 @@ def convert_filtered_image(filtered_path_image):
         generic_image = Image.fromarray(np.uint8(filtered_path_image))
     else:
         generic_image = Image.fromarray(filtered_path_image[:, :, 0].astype(np.uint8))
+
     filtred_tk_image = ImageTk.PhotoImage(generic_image)
     return filtred_tk_image
 
@@ -87,23 +87,29 @@ class ImageProcessor:
         label.pack()
         window.mainloop()
 
-    def sobel_filter(self):
-        r = np.matrix("1 2 1; 0 0 0; -1 -2 -1")
-        a = ""
+    def get_image(self):
         try:
-            a = read_img(self.img_file[0])
+            return read_img(self.img_file[0])
         except IndexError:
             messagebox.showerror("Error", "No hay un archivo cargado")
-        b = np.zeros(a.shape[:3])
-        b[:, :, 0] = cv.filter2D(a[:, :, 0], -1, r)
+            return None
 
-        display_compare_window(a, b, "sobel_filter")
+    def sobel_filter(self):
+        img = self.get_image()
+
+        if img is None:
+            return
+
+        r = np.matrix("1 2 1; 0 0 0; -1 -2 -1")
+        b = np.zeros(img.shape[:3])
+        b[:, :, 0] = cv.filter2D(img[:, :, 0], -1, r)
+
+        display_compare_window(img, b, "sobel_filter")
 
     def laplacian_filter(self):
-        try:
-            img = read_img(self.img_file[0])
-        except IndexError:
-            messagebox.showerror("Error", "No hay un archivo cargado")
+        img = self.get_image()
+
+        if img is None:
             return
 
         # Aplicar el filtro Laplaciano
@@ -112,11 +118,9 @@ class ImageProcessor:
         display_compare_window(img, laplacian, "Laplacian_filter")
 
     def roberts_filter(self):
+        img = self.get_image()
 
-        try:
-            img = read_img(self.img_file[0])
-        except IndexError:
-            messagebox.showerror("Error", "No hay un archivo cargado")
+        if img is None:
             return
 
         # Convertir la imagen a escala de grises
@@ -129,25 +133,22 @@ class ImageProcessor:
         display_compare_window(img, np.uint8(roberts), "robers_filter")
 
     def high_pass_filter(self):
-        try:
-            img = read_img(self.img_file[0])
-        except IndexError:
-            messagebox.showerror("Error","No hay un archivo cargado")
+        img = self.get_image()
+
+        if img is None:
             return
-            # Convertir la imagen a escala de grises
+
         gray = cv.cvtColor(img, cv.COLOR_RGB2GRAY)
 
-        # Aplicar el filtro de paso alto
-        kernel = np.array([[-1, -1, -1], [-1, 8, -1], [-1, -1, -1]])
+        kernel = np.matrix("-1 -1 -1; -1 8 -1; -1 -1 -1")
         high_pass = cv.filter2D(gray, -1, kernel)
 
         display_compare_window(img, high_pass, "High Pass Filter")
 
     def low_pass_filter(self):
-        try:
-            img = read_img(self.img_file[0])
-        except IndexError:
-            messagebox.showerror("Error", "No hay un archivo cargado")
+        img = self.get_image()
+
+        if img is None:
             return
 
         # Aplicar el filtro de paso bajo
@@ -157,10 +158,9 @@ class ImageProcessor:
         display_compare_window(img, low_pass, "Low Pass Filter")
 
     def edge_enhancement(self):
-        try:
-            img = read_img(self.img_file[0])
-        except IndexError:
-            messagebox.showerror("Error", "No hay un archivo cargado")
+        img = self.get_image()
+
+        if img is None:
             return
 
         gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
@@ -174,24 +174,18 @@ class ImageProcessor:
 
         edges = edges * 255
 
-        display_compare_window(img,edges, "edge-enhancement")
+        display_compare_window(img, edges, "edge-enhancement")
 
     def ocr(self):
-        try:
-            img = read_img(self.img_file[0])
-        except IndexError:
-            messagebox.showerror("Error", "No hay un archivo cargado")
+        img = self.get_image()
+
+        if img is None:
             return
 
         gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 
-        threshold_img = cv.threshold(gray,0,255, cv.THRESH_BINARY + cv.THRESH_OTSU)[1]
+        threshold_img = cv.threshold(gray, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)[1]
 
         text = pytesseract.image_to_string(threshold_img)
 
-        messagebox.showinfo("Mesaje",text)
-
-
-
-
-
+        messagebox.showinfo("Mesaje", text)
