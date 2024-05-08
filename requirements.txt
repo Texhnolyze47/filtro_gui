@@ -12,3 +12,4 @@ python-dateutil==2.9.0.post0
 six==1.16.0
 
 scikit-image~=0.23.2
+pytesseract~=0.3.10
