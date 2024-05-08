@@ -49,19 +49,29 @@ def load_image():
 
 
 def sobel_filter():
-    r = np.matrix("1 2 1; 0 0 0; -1 -2 -1")
-    a = read_img(img_file[0])
-    b = np.zeros(a.shape[:3])
-    a = cv.cvtColor(a, cv.COLOR_BGR2RGB)
-    b[:, :, 0] = cv.filter2D(a[:, :, 0], -1, r)
     window = tk.Toplevel()
+    window.title("Filtro sobel")
 
-    pil_image = Image.fromarray(b[:, :, 0].astype(np.uint8))
+    r = np.matrix("1 2 1; 0 0 0; -1 -2 -1")
+    a = ""
+    try:
+        a = read_img(img_file[0])
+    except IndexError:
+        messagebox.showerror("Error", "No hay un archivo cargado")
+    b = np.zeros(a.shape[:3])
+    b[:, :, 0] = cv.filter2D(a[:, :, 0], -1, r)
 
-    tk_image = ImageTk.PhotoImage(pil_image)
+    original_pil_image = Image.fromarray(a.astype(np.uint8))
+    original_tk_image = ImageTk.PhotoImage(original_pil_image)
 
-    label_image = tk.Label(window, image=tk_image)
-    label_image.pack()
+    orignal_label_image = tk.Label(window, image=original_tk_image)
+    orignal_label_image.pack(side=tk.LEFT)
+
+    filtred_pil_image = Image.fromarray(b[:, :, 0].astype(np.uint8))
+    filtred_tk_image = ImageTk.PhotoImage(filtred_pil_image)
+
+    filtered_label_image = tk.Label(window, image=filtred_tk_image)
+    filtered_label_image.pack(side=tk.RIGHT)
 
     window.mainloop()
 
