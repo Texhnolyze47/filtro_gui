@@ -26,9 +26,9 @@ if __name__ == "__main__":
 
     ffMenu = tk.Menu(barraMenu)
     barraMenu.add_cascade(label="Filtro Frecuencia", menu=ffMenu)
-    ffMenu.add_command(label="Paso Alto")
-    ffMenu.add_command(label="Paso Bajo")
-    ffMenu.add_command(label="Realce y Deteccion de Bordes")
+    ffMenu.add_command(label="Paso Alto", command=image_processor.high_pass_filter)
+    ffMenu.add_command(label="Paso Bajo", command=image_processor.low_pass_filter)
+    ffMenu.add_command(label="Realce y Deteccion de Bordes", command=image_processor.edge_enhancement)
 
     fondo = tk.PhotoImage(file="./assets/background_image.gif")
     tk.Label(root, image=fondo).place(relx=0.5, rely=0.5, anchor=tk.CENTER, relwidth=1, relheight=1)
