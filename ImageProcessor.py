@@ -3,6 +3,7 @@ from tkinter import messagebox
 import tkinter as tk
 import cv2 as cv
 import numpy as np
+import skimage.feature
 from PIL import ImageTk, Image
 
 
@@ -152,3 +153,23 @@ class ImageProcessor:
         low_pass = cv.filter2D(img, -1, kernel)
 
         display_compare_window(img, low_pass, "Low Pass Filter")
+
+    def edge_enhancement(self):
+        try:
+            img = read_img(self.img_file[0])
+        except IndexError:
+            messagebox.showerror("Error", "No hay un archivo cargado")
+            return
+
+        gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+
+        edges = skimage.feature.canny(
+            image=gray,
+            sigma=3,
+            low_threshold=0.0,
+            high_threshold=5.0
+        )
+
+        edges = edges * 255
+
+        display_compare_window(img,edges, "edge-enhancement")
