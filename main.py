@@ -1,7 +1,6 @@
 import tkinter as tk
 from ImageProcessor import ImageProcessor
 
-
 if __name__ == "__main__":
     root = tk.Tk()
     root.geometry("1300x650+20+0")
@@ -23,7 +22,11 @@ if __name__ == "__main__":
     barraMenu.add_cascade(label="Filtro Espacial", menu=feMenu)
     feMenu.add_command(label="Sobel", command=image_processor.sobel_filter)
     feMenu.add_command(label="Laplaciano", command=image_processor.laplacian_filter)
-    feMenu.add_command(label="roberts", command=image_processor.roberts_filter)
+
+    medianMenu = tk.Menu(barraMenu)
+    barraMenu.add_cascade(label="median-filter", menu=medianMenu)
+    medianMenu.add_command(label="media", command=image_processor.median_filter)
+    medianMenu.add_command(label="gaussian", command=image_processor.gaussian_blur)
 
     ffMenu = tk.Menu(barraMenu)
     barraMenu.add_cascade(label="Filtro Frecuencia", menu=ffMenu)

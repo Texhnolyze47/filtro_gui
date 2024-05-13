@@ -1,60 +1,15 @@
 from tkinter.filedialog import askopenfilename
-from tkinter import messagebox
-import tkinter as tk
-import cv2 as cv
+
 import numpy as np
 import pytesseract
 import skimage.feature
-from PIL import ImageTk, Image
-
-
-def read_img(path_image):
-    input_image = cv.imread(path_image)
-    if input_image is None:
-        messagebox.showerror("Error", "Archivo no encontrado")
-        return None
-    input_image = cv.cvtColor(input_image, cv.COLOR_BGR2RGB)
-    return input_image
-
-
-def convert_pil_image(original_image_array):
-    # Comprueba las dimensiones de un array
-    if original_image_array.ndim == 2:
-        original_pil_image = Image.fromarray(original_image_array)
-    else:
-        original_pil_image = Image.fromarray(original_image_array.astype(np.uint8))
-    original_tk_image = ImageTk.PhotoImage(original_pil_image)
-    return original_tk_image
-
-
-def convert_filtered_image(filtered_image_array):
-    if filtered_image_array.ndim == 2:
-        generic_image = Image.fromarray(np.uint8(filtered_image_array))
-    else:
-        generic_image = Image.fromarray(filtered_image_array[:, :, 0].astype(np.uint8))
-
-    filtred_tk_image = ImageTk.PhotoImage(generic_image)
-    return filtred_tk_image
-
-
-def display_compare_window(original_image, filtered_image, filter_name):
-    window = tk.Toplevel()
-    window.title(filter_name)
-
-    original_image = convert_pil_image(original_image_array=original_image)
-
-    orignal_label_image = tk.Label(window, image=original_image)
-    orignal_label_image.pack(side=tk.LEFT)
-
-    filtered_image = convert_filtered_image(filtered_image_array=filtered_image)
-
-    filtered_label_image = tk.Label(window, image=filtered_image)
-    filtered_label_image.pack(side=tk.RIGHT)
-
-    window.mainloop()
+from image_processing_utils import *
 
 
 class ImageProcessor:
+    """
+    A class
+    """
     def __init__(self):
         self.img_files = []
 
@@ -158,6 +113,31 @@ class ImageProcessor:
 
         display_compare_window(img, low_pass, "Low Pass Filter")
 
+    def median_filter(self):
+        img = self.get_image()
+
+        if img is None:
+            return
+
+        copy_image = np.zeros(img.shape[:3], np.uint8)
+
+        b = np.zeros(9, np.uint8)
+
+        n = img.shape[0]
+        m = img.shape[1]
+
+        for g in range(3):
+            for i in range(1, n - 1):
+                for j in range(1, m - 1):
+                    for k in range(-1, 2):
+                        for l in range(-1, 2):
+                            b[3 * (k + 1) + l + 1] = img[i + k, j + l, g]
+
+                    b.sort()
+                    copy_image[i, j, g] = int(b[5])
+        display_compare_window(original_image=img, filtered_image=copy_image, filter_name="Mediana")
+
+
     def edge_enhancement(self):
         img = self.get_image()
 
@@ -176,6 +156,21 @@ class ImageProcessor:
         edges = edges * 255
 
         display_compare_window(img, edges, "edge-enhancement")
+
+    def gaussian_blur(self):
+        img = self.get_image()
+
+        if img is None:
+            return
+
+        gray = cv.cvtColor(img,cv.COLOR_BGR2GRAY)
+
+        noise_gaussian = np.zeros((gray.shape[0], img.shape[1]), dtype="uint8")
+
+        cv.randn(noise_gaussian, 32, 16)
+        img_noise = cv.add(gray, noise_gaussian)
+
+        display_compare_window(img,img_noise,"gaussian")
 
     def ocr(self):
         img = self.get_image()
