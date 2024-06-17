@@ -25,18 +25,25 @@ if __name__ == "__main__":
 
     medianMenu = tk.Menu(barraMenu)
     barraMenu.add_cascade(label="median-filter", menu=medianMenu)
-    medianMenu.add_command(label="media", command=image_processor.median_filter)
-    medianMenu.add_command(label="gaussian", command=image_processor.gaussian_blur)
+    medianMenu.add_command(label="mediana", command=image_processor.median_filter)
+    medianMenu.add_command(label="gaussian_filter", command=image_processor.gaussian_filter)
 
     ffMenu = tk.Menu(barraMenu)
-    barraMenu.add_cascade(label="Filtro Frecuencia", menu=ffMenu)
-    ffMenu.add_command(label="Paso Alto", command=image_processor.high_pass_filter)
-    ffMenu.add_command(label="Paso Bajo", command=image_processor.low_pass_filter)
-    ffMenu.add_command(label="Realce y Deteccion de Bordes", command=image_processor.edge_enhancement)
+    barraMenu.add_cascade(label="Realce-deteccion de border", menu=ffMenu)
+    ffMenu.add_command(label="Derivada", command=image_processor.derivative)
+    ffMenu.add_command(label="Canny", command=image_processor.canny)
 
     ocrMenu = tk.Menu(barraMenu)
     barraMenu.add_cascade(label="OCR", menu=ocrMenu)
     ocrMenu.add_command(label="OCR", command=image_processor.ocr)
+
+    sharpMenu = tk.Menu(barraMenu)
+    barraMenu.add_cascade(label="sharp",menu=sharpMenu)
+    sharpMenu.add_command(label="sharp", command=image_processor.sharp)
+
+    fourier = tk.Menu(barraMenu)
+    barraMenu.add_cascade(label="fourier", menu=fourier)
+    fourier.add_command(label="DFT", command=image_processor.dft)
 
     fondo = tk.PhotoImage(file="./assets/background_image.gif")
     tk.Label(root, image=fondo).place(relx=0.5, rely=0.5, anchor=tk.CENTER, relwidth=1, relheight=1)
